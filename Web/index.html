@@ -6,10 +6,20 @@
     <title>Unity WebGL Player | WildernessReplay</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+    <script>
+      // 永久屏蔽浏览器默认右键菜单，确保 WebGL 内右键旋转/交互不被浏览器拦截
+      // 双保险：window 捕获阶段 + document 冒泡阶段，任何元素右击都弹不出菜单
+      window.addEventListener('contextmenu', function(e) {
+          e.preventDefault();
+      }, true);
+      document.addEventListener('contextmenu', function(e) {
+          e.preventDefault();
+      }, false);
+    </script>
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+      <canvas id="unity-canvas" width=960 height=600 tabindex="-1" oncontextmenu="return false"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">

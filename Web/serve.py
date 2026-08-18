@@ -21,6 +21,8 @@ class H(SimpleHTTPRequestHandler):
             self.send_header("Content-Encoding", "gzip")
         if p.endswith(".br"):
             self.send_header("Content-Encoding", "br")
+        # 禁用浏览器缓存：每次请求都重新校验，避免测试时加载到旧的 index.html / 旧构建文件
+        self.send_header("Cache-Control", "no-cache")
         super().end_headers()
 
 if __name__ == "__main__":
