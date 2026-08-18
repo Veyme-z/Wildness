@@ -28,5 +28,5 @@ class H(SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     print("目录:", ROOT)
     print("index.html:", os.path.exists(os.path.join(ROOT, "index.html")))
-    print("打开这个: http://127.0.0.1:8765/")
+    print("打开这个: http://10.25.189.73:8765/")
     ThreadingHTTPServer(("0.0.0.0", 8765), H).serve_forever()
