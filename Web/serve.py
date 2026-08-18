@@ -29,4 +29,4 @@ if __name__ == "__main__":
     print("目录:", ROOT)
     print("index.html:", os.path.exists(os.path.join(ROOT, "index.html")))
     print("打开这个: http://127.0.0.1:8765/")
-    ThreadingHTTPServer(("127.0.0.1", 8765), H).serve_forever()
+    ThreadingHTTPServer(("0.0.0.0", 8765), H).serve_forever()
