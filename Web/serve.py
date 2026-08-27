@@ -1,5 +1,17 @@
 import os
+import socket
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+def get_local_ip():
+    """获取本机在局域网中的 IP 地址。"""
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        return s.getsockname()[0]
+    except OSError:
+        return "127.0.0.1"
+    finally:
+        s.close()
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 os.chdir(ROOT)
@@ -28,5 +40,5 @@ class H(SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     print("目录:", ROOT)
     print("index.html:", os.path.exists(os.path.join(ROOT, "index.html")))
-    print("打开这个: http://10.25.189.73:8765/")
+    print("打开这个: http://{}:8765/".format(get_local_ip()))
     ThreadingHTTPServer(("0.0.0.0", 8765), H).serve_forever()
