@@ -21,21 +21,25 @@
       #unity-container.unity-desktop { width: 100vw; height: 100vh; background: #0b1020; }
       #unity-canvas { background: #000; }
       #unity-footer { display: none; }
-      #unity-warning { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); max-width: min(720px, calc(100vw - 32px)); z-index: 20; color: #ffd9a0; background: rgba(40,20,10,0.94); border: 1px solid #b8862f; border-radius: 6px; padding: 10px 16px; font: 500 13px/1.6 'Microsoft YaHei', sans-serif; }
-      #unity-loading-bar { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(500px, calc(100vw - 48px)); padding: 28px 34px; background: rgba(16,22,40,0.96); border: 1px solid #2c3a5c; border-radius: 10px; box-shadow: 0 26px 80px rgba(0,0,0,0.6); text-align: center; }
       #unity-logo { display: none; }
-      .wilderness-loading-title { color: #e8edf7; font: 700 24px/1.3 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif; }
-      .wilderness-loading-sub { margin-top: 8px; color: #8fa3c8; font: 500 13px/1.6 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif; }
-      #unity-progress-bar-empty { width: 100%; height: 8px; margin-top: 22px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; overflow: hidden; }
-      #unity-progress-bar-full { height: 100%; min-width: 4px; background: linear-gradient(90deg, #1e6fd9, #38c8ff); border-radius: 999px; background-image: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%); background-size: 26px 26px; animation: wildernessStripes 0.9s linear infinite; transition: width 0.3s ease; }
-      @keyframes wildernessStripes { 0% { background-position: 0 0; } 100% { background-position: 26px 0; } }
+      #unity-loading-bar { display: none !important; }
+      #unity-warning { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); max-width: min(720px, calc(100vw - 32px)); z-index: 20; color: #ffd9a0; background: rgba(40,20,10,0.94); border: 1px solid #b8862f; border-radius: 6px; padding: 10px 16px; font: 500 13px/1.6 'Microsoft YaHei', sans-serif; }
+      #wr-splash { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: radial-gradient(ellipse at 50% 34%, #182240 0%, #0b1020 68%, #05070d 100%); transition: opacity 0.5s ease; }
+      #wr-splash.wr-hidden { opacity: 0; pointer-events: none; }
+      .wr-card { width: min(520px, calc(100vw - 48px)); padding: 30px 38px; background: rgba(13,19,34,0.92); border: 1px solid #2c3a5c; border-radius: 12px; box-shadow: 0 26px 80px rgba(0,0,0,0.6); text-align: center; }
+      .wr-title { color: #e8edf7; font: 700 28px/1.3 'Microsoft YaHei','Noto Sans CJK SC',sans-serif; }
+      .wr-status { margin-top: 10px; color: #9fb1d4; font: 500 14px/1.6 'Microsoft YaHei','Noto Sans CJK SC',sans-serif; min-height: 22px; }
+      .wr-track { width: 100%; height: 8px; margin-top: 24px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; overflow: hidden; }
+      .wr-fill { height: 100%; min-width: 4px; width: 0%; background: linear-gradient(90deg, #1e6fd9, #38c8ff); border-radius: 999px; background-image: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%); background-size: 26px 26px; animation: wrStripes 0.9s linear infinite; transition: width 0.25s ease; }
+      @keyframes wrStripes { 0% { background-position: 0 0; } 100% { background-position: 26px 0; } }
     </style>
   </head>
   <body>
+    <div id="wr-splash"><div class="wr-card"><div class="wr-title">荒野回放</div><div class="wr-status" id="wr-status">正在加载回放资源… 0%</div><div class="wr-track"><div class="wr-fill" id="wr-fill"></div></div></div></div>
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=960 height=600 tabindex="-1" oncontextmenu="return false"></canvas>
       <div id="unity-loading-bar">
-        <div id="unity-logo"></div><div class="wilderness-loading-title">荒野回放</div><div class="wilderness-loading-sub" id="wilderness-progress-text">正在加载回放资源… 0%</div>
+        <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
           <div id="unity-progress-bar-full"></div>
         </div>
@@ -81,12 +85,12 @@
       }
 
       var buildUrl = "Build";
-      var buildStamp = "20260902113519";
-      var loaderUrl = buildUrl + "/WildernessReplay_WebGL_20260902.loader.js" + "?v=" + buildStamp;
+      var buildStamp = "20260903083343";
+      var loaderUrl = buildUrl + "/WildernessReplay_WebGL_20260903.loader.js" + "?v=" + buildStamp;
       var config = {
-        dataUrl: buildUrl + "/WildernessReplay_WebGL_20260902.data.unityweb" + "?v=" + buildStamp,
-        frameworkUrl: buildUrl + "/WildernessReplay_WebGL_20260902.framework.js.unityweb" + "?v=" + buildStamp,
-        codeUrl: buildUrl + "/WildernessReplay_WebGL_20260902.wasm.unityweb" + "?v=" + buildStamp,
+        dataUrl: buildUrl + "/WildernessReplay_WebGL_20260903.data.unityweb" + "?v=" + buildStamp,
+        frameworkUrl: buildUrl + "/WildernessReplay_WebGL_20260903.framework.js.unityweb" + "?v=" + buildStamp,
+        codeUrl: buildUrl + "/WildernessReplay_WebGL_20260903.wasm.unityweb" + "?v=" + buildStamp,
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "WildernessReplay",
@@ -137,17 +141,23 @@
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
+        window.__wrHideSplash = function () { var s = document.getElementById('wr-splash'); if (!s) return; s.classList.add('wr-hidden'); setTimeout(function () { if (s && s.parentNode) s.parentNode.removeChild(s); }, 600); };
+        window.__wrGameReady = function () { window.__wrHideSplash(); };
+        window.__wrStatus = function (t) { var e = document.getElementById('wr-status'); if (e) e.textContent = t; };
+        window.__wrLoadError = function (msg) { var e = document.getElementById('wr-status'); if (e) { e.textContent = '加载失败：' + msg; e.style.color = '#ff9d8a'; } console.error(msg); };
+        setTimeout(function () { window.__wrHideSplash(); }, 90000);
         createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = Math.max(2, Math.round(progress * 100)) + "%";
-        var _wt = document.getElementById('wilderness-progress-text');
-        if (_wt) _wt.textContent = progress >= 1 ? '正在启动引擎…' : '正在加载回放资源… ' + Math.round(progress * 100) + '%';
+          var _wrFill = document.getElementById('wr-fill');
+        if (_wrFill) _wrFill.style.width = Math.max(2, Math.round(progress * 100)) + '%';
+        var _wrSt = document.getElementById('wr-status');
+        if (_wrSt) _wrSt.textContent = progress >= 1 ? '正在启动引擎…' : '正在加载回放资源… ' + Math.round(progress * 100) + '%';
               }).then((unityInstance) => {
                 loadingBar.style.display = "none";
                 fullscreenButton.onclick = () => {
                   unityInstance.SetFullscreen(1);
                 };
               }).catch((message) => {
-                alert(message);
+                window.__wrLoadError ? window.__wrLoadError(message) : alert(message);
               });
             };
 
